@@ -12,12 +12,26 @@ class BaseApplicationResource(ABC):
     def __init__(self):
         pass
 
+    def get_links(cls, resource_data):
+        for resource in resource_data:
+            address_id = resource.get('id')
+
+            links = []
+            address_link = {"rel": "self", "href": "/addresses/" + str(address_id)}
+            links.append(address_link)
+
+            users_link = {"rel": "users", "href": "/users?address_id=" + str(address_id)}
+            links.append(users_link)
+
+            resource['links'] = links
+            return resource_data
+
     @classmethod
-    def get_by_template(cls, template):
-        db_name, table_name = cls.get_data_resource_info()
-        resource = BaseDataResource.find_by_template(db_name, table_name, template, None)
-        result = cls.get_links(resource)
+    def get_by_template(self, db_name, table_name, template):
+        resource = BaseDataResource.find_by_template(db_name, table_name, template)
+        result = self.get_links(resource)
         return result
+
 
 
     @classmethod
@@ -25,21 +39,18 @@ class BaseApplicationResource(ABC):
         pass
 
     @classmethod
-    def create(cls, create_data):
-        db_name, table_name = cls.get_data_resource_info()
+    def create(db_name, table_name, create_data):
         res = BaseDataResource.create(db_name, table_name, create_data)
 
         return res
 
     @classmethod
-    def update(cls, update_data, template):
-        db_name, table_name = cls.get_data_resource_info()
+    def update(db_name, table_name, update_data, template):
         res = BaseDataResource.update(db_name, table_name, update_data, template)
         return res
 
     @classmethod
-    def delete(cls, record_id):
-        db_name, table_name = cls.get_data_resource_info()
+    def delete(db_name, table_name, record_id):
         res = BaseDataResource.delete(db_name, table_name, record_id)
         return res
 
@@ -53,23 +64,4 @@ class BaseApplicationResource(ABC):
     def get_data_resource_info(cls):
         pass
 
-#
-# class BaseRDBApplicationResource(BaseApplicationResource):
-#
-#     def __init__(self):
-#         super().__init__()
-#
-#     @classmethod
-#     @abstractmethod
-#     def get_by_template(cls, template):
-#         pass
-#
-#     @classmethod
-#     @abstractmethod
-#     def get_links(cls, resource_data):
-#         pass
-#
-#     @classmethod
-#     @abstractmethod
-#     def get_data_resource_info(cls):
-#         pass
+

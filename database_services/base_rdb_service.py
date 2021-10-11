@@ -86,7 +86,7 @@ class BaseDataResource:
         return clause, args
 
     @classmethod
-    def find_by_template(cls, db_schema, table_name, template, field_list):
+    def find_by_template(cls, db_schema, table_name, template):
 
         wc, args = BaseDataResource.get_where_clause_args(template)
 

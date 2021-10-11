@@ -1,16 +1,14 @@
 import flask
 from flask import *
 #from application.user_services import userclass
-from application_services.address_service import AddressResource
+from application_services.address_service import *
  
 app = Flask(__name__)
 
 
 @app.route('/')
 def index_page():
-    return '''
-    index.html
-  '''
+    return """render_template("index.html")"""
 
 # newsId = shortuuid.uuid(url)
 
