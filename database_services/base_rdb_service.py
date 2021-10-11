@@ -3,6 +3,7 @@ import json
 import logging
 
 import sys
+
 sys.path.append('../')
 import middleware.context as context
 
@@ -25,7 +26,7 @@ class BaseDataResource:
         logger.info("\t HOST = " + db_info['host'])
 
         db_connection = pymysql.connect(
-           **db_info,
+            **db_info,
             autocommit=True
         )
         return db_connection
@@ -55,7 +56,7 @@ class BaseDataResource:
         cur = conn.cursor()
 
         sql = "SELECT * FROM " + db_schema + "." + table_name + " WHERE " + \
-            column_name + " LIKE " + "'" + value_prefix + "%'" + " AND is_deleted = 0"
+              column_name + " LIKE " + "'" + value_prefix + "%'" + " AND is_deleted = 0"
         print("SQL Statement = " + cur.mogrify(sql, None))
 
         res = cur.execute(sql)
@@ -76,20 +77,18 @@ class BaseDataResource:
             clause = ""
             args = None
         else:
-            for k,v in template.items():
+            for k, v in template.items():
                 terms.append(k + "=%s")
                 args.append(v)
 
-            # clause = " WHERE " +  " AND ".join(terms) + " AND is_deleted = 0"
-            clause = " WHERE " +  " AND ".join(terms)
-
+            clause = " WHERE " + " AND ".join(terms)
 
         return clause, args
 
     @classmethod
     def find_by_template(cls, db_schema, table_name, template, field_list):
 
-        wc,args = BaseDataResource.get_where_clause_args(template)
+        wc, args = BaseDataResource.get_where_clause_args(template)
 
         conn = BaseDataResource.get_db_connection()
         cur = conn.cursor()
@@ -109,7 +108,7 @@ class BaseDataResource:
         vals = ["0"]
         args = []
 
-        for k,v in create_data.items():
+        for k, v in create_data.items():
             cols.append(k)
             vals.append('%s')
             args.append(v)
@@ -118,31 +117,29 @@ class BaseDataResource:
         vals_clause = "values (" + ",".join(vals) + ")"
 
         sql_stmt = "insert into " + db_schema + "." + table_name + " " + cols_clause + \
-            " " + vals_clause
+                   " " + vals_clause
 
         res = BaseDataResource.run_sql(sql_stmt, args)
 
         return res
 
-
     @classmethod
     def update(cls, db_schema, table_name, update_data, template):
 
-        wc,wc_args = BaseDataResource.get_where_clause_args(template)
+        wc, wc_args = BaseDataResource.get_where_clause_args(template)
 
         cols = []
         # vals = []
         args = []
 
-        for k,v in update_data.items():
+        for k, v in update_data.items():
             cols.append(k + '=%s')
             # vals.append('%s')
             args.append(v)
 
-        cols_clause = ",".join(cols) 
+        cols_clause = ",".join(cols)
 
-        sql_stmt = "UPDATE " + db_schema + "." + table_name + " SET " + cols_clause + " " +wc
-        
+        sql_stmt = "UPDATE " + db_schema + "." + table_name + " SET " + cols_clause + " " + wc
 
         args.extend(wc_args)
 
@@ -151,11 +148,9 @@ class BaseDataResource:
         return res
 
     @classmethod
-    def delete(cls, db_schema, table_name, user_id):
-        update_data = {"is_deleted" : 1}
-        template = {"id": user_id}
+    def delete(cls, db_schema, table_name, record_id):
+        update_data = {"is_deleted": 1}
+        template = {"id": record_id}
         res = BaseDataResource.update(db_schema, table_name, update_data, template)
 
         return res
-
-

@@ -3,7 +3,7 @@ from base_rdb_service import BaseDataResource
 def t1():
 
     res = BaseDataResource.get_by_prefix(
-        "users", "user", "name_first", "Yuki"
+        "users", "address", "city", "NY"
     )
     print("t1 resule = ", res)
 
@@ -47,7 +47,7 @@ def t5():
         "users", "user", 1)
     print("t5: res = ", res)
 
-#t1()
+t1()
 #t2()
 #t3()
 #t4()
