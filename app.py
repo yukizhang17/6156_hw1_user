@@ -2,6 +2,7 @@ import flask
 from flask import *
 #from application.user_services import userclass
 from application_services.address_service import *
+import json
  
 app = Flask(__name__)
 
@@ -54,7 +55,8 @@ def address():
         insert_address(request.form['address'])
 
     elif flask.request.method == 'GET':
-        return get_all_address()
+        # print(get_all_address())
+        return json.dumps(get_all_address())
 
 
 @app.route('/address/<addressID>', methods=['GET', 'PUT', 'DELETE'])

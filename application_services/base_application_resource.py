@@ -29,8 +29,9 @@ class BaseApplicationResource(ABC):
     @classmethod
     def get_by_template(self, db_name, table_name, template):
         resource = BaseDataResource.find_by_template(db_name, table_name, template)
-        result = self.get_links(resource)
-        return result
+        # result = self.get_links(resource)
+        print(resource)
+        return resource
 
 
 
