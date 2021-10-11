@@ -1,84 +1,85 @@
-from flask import Flask, Response, request
-from flask_cors import CORS
-import json
-from application_services.AddressResource.address_service import AddressResource
-
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-# from application_services.UsersResource.user_service import UserResource
-
+import flask
+from flask import *
+#from application.user_services import userclass
+from application_services.address_service import AddressResource
+ 
 app = Flask(__name__)
-CORS(app)
 
 
 @app.route('/')
-def hello_world():
-    return '<u>Hello World!</u>'
+def index_page():
+    return '''
+    index.html
+  '''
+
+# newsId = shortuuid.uuid(url)
 
 
-# @app.route('/imdb/artists/<prefix>')
-# def get_artists_by_prefix(prefix):
-#     res = IMDBArtistResource.get_by_name_prefix(prefix)
-#     rsp = Response(json.dumps(res), status=200, content_type="application/json")
-#     return rsp
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    if flask.request.method == 'POST':
+        # User form['user'] for data insertion -> None
+        insert_user(request.form['user'])
+
+    elif flask.request.method == 'GET':
+        # get_all_user_info() -> JSON()
+        return get_all_user()
 
 
-# @app.route('/users/create')
-# def get_users():
-#     res = UserResource.get_by_template(None)
-#     rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-#     return rsp
+@app.route('/users/<userID>', methods=['GET', 'PUT', 'DELETE'])
+def users_id():
+    if flask.request.method == 'GET':
+        # get_user_info(userID) - userID get from url -> JSON
+        return get_user_by_id(request.args.get('userID'))
 
-@app.route('/addresses', methods=["GET", "POST"])
-def addresses():
-    if request.method == "GET":
-        res = AddressResource.get_by_template(None)
-        # add pagination
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+    elif flask.request.method == 'PUT':
+        # update_user_info(userID) - userID get from url - request.form['user'] input form
+        update_user(request.args.get('userID'), request.form['user'])
 
-    elif request.method == "POST":
-        data = request.args
-        print(data)
-        res = AddressResource.create(data)
-
-        headers = [{"Location", "/addresses/" + str(res)}]
-        rsp = Response("CREATED", status=201, headers=headers, content_type="text/plain")
-    else:
-        rsp = Response("NOT IMPLEMENTED", status=501, content_type="text/plain")
-
-    return rsp
+    elif flask.request.method == 'DELETE':
+        # delete_user_info(userID) - userID get from url
+        delete_user(request.args.get('userID'))
 
 
-@app.route('/addresses/id', methods=["GET", "POST", "PUT", "DELETE"])
-def addresses_id():
-    addr_id = request.path_parameter["parameter_1"]
+@app.route('/users/<userID>/address', methods=['GET', 'POST'])
+def users_id_address():
+    if flask.request.method == 'POST':
+        return update_address_by_uid(request.args.get('userID'))
 
-    if request.method == "GET":
-        res = AddressResource.get_by_template(None)
-        # add pagination
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+    elif flask.request.method == 'GET':
+        return get_address_by_uid(request.args.get('userID'))
 
-    # elif request.method == "POST":
-        # print(data)
-        # res = AddressResource.create(data)
 
-        # headers = [{"Location", "/addresses/" + str(res)}]
-        # rsp = Response("CREATED", status=201, headers=headers, content_type="text/plain")
-    else:
-        rsp = Response("NOT IMPLEMENTED", status=501, content_type="text/plain")
+@app.route('/address', methods=['GET', 'POST'])
+def address():
+    if flask.request.method == 'POST':
+        insert_address(request.form['address'])
 
-    return rsp
+    elif flask.request.method == 'GET':
+        return get_all_address()
 
-# @app.route('/<db_schema>/<table_name>/<column_name>/<prefix>')
-# def get_by_prefix(db_schema, table_name, column_name, prefix):
-#     res = d_service.get_by_prefix(db_schema, table_name, column_name, prefix)
-#     rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-#     return rsp
+
+@app.route('/address/<addressID>', methods=['GET', 'PUT', 'DELETE'])
+def address_id():
+    if flask.request.method == 'GET':
+        return get_address_by_aid(request.args.get('addressID'))
+
+    elif flask.request.method == 'PUT':
+        update_address(request.args.get('addressID'), request.form['address'])
+
+    elif flask.request.method == 'DELETE':
+        delete_address(request.args.get('addressID'))
+
+
+@app.route('/address/<addressID>/users', methods=['GET', 'POST'])
+def address_id_users():
+    if flask.request.method == 'POST':
+        return insert_user_by_addressid(request.args.get())
+
+    elif flask.request.method == 'GET':
+        return get_user_by_addressid(request.args.get())
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run()
+
