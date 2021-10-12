@@ -2,6 +2,7 @@ import flask
 from flask import *
 #from application.user_services import userclass
 from application_services.address_service import *
+from application_services.user_service import *
 import json
  
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def users():
 
     elif flask.request.method == 'GET':
         # get_all_user_info() -> JSON()
-        return get_all_user()
+        return json.dumps(get_all_user())
 
 
 @app.route('/users/<userID>', methods=['GET', 'PUT', 'DELETE'])
