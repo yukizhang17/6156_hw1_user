@@ -19,6 +19,7 @@ def index_page():
 def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
+
         insert_user(request.form['user'])
 
     elif flask.request.method == 'GET':
@@ -27,10 +28,10 @@ def users():
 
 
 @app.route('/users/<userID>', methods=['GET', 'PUT', 'DELETE'])
-def users_id():
+def users_id(userID):
     if flask.request.method == 'GET':
         # get_user_info(userID) - userID get from url -> JSON
-        return get_user_by_id(request.args.get('userID'))
+        return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'PUT':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
