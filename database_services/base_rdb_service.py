@@ -69,8 +69,8 @@ class BaseDataResource:
     @classmethod
     def get_where_clause_args(cls, template):
 
-        terms = ["is_deleted = %s"]
-        args = ["0"]
+        terms = []
+        args = []
         clause = None
 
         if template is None or template == {}:
@@ -105,8 +105,8 @@ class BaseDataResource:
     @classmethod
     def create(cls, db_schema, table_name, create_data):
 
-        cols = ["is_deleted"]
-        vals = ["0"]
+        cols = []
+        vals = []
         args = []
 
         for k, v in create_data.items():
@@ -150,8 +150,16 @@ class BaseDataResource:
 
     @classmethod
     def delete(cls, db_schema, table_name, record_id):
-        update_data = {"is_deleted": 1}
-        template = {"id": record_id}
-        res = BaseDataResource.update(db_schema, table_name, update_data, template)
+        wc, args = BaseDataResource.get_where_clause_args(template)
+
+        conn = BaseDataResource.get_db_connection()
+        cur = conn.cursor()
+
+        sql = "DELETE FROM " + db_schema + "." + table_name + " " + wc
+        
+        res = cur.execute(sql, args=args)
+        res = cur.fetchall()
+
+        conn.close()
 
         return res
