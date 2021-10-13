@@ -22,14 +22,14 @@ def users():
 
     elif flask.request.method == 'GET':
         # get_all_user_info() -> JSON()
-        return get_all_user()
+        return json.dumps(get_all_user())
 
 
 @app.route('/users/<userID>', methods=['GET', 'PUT', 'DELETE'])
 def users_id(userID):
     if flask.request.method == 'GET':
         # get_user_info(userID) - userID get from url -> JSON
-        return get_user_by_id(userID)
+        return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'PUT':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
@@ -46,7 +46,7 @@ def users_id_address(userID):
         return update_address_by_uid(userID)
 
     elif flask.request.method == 'GET':
-        return get_address_by_uid(userID)
+        return json.dumps(get_address_by_uid(userID))
 
 
 @app.route('/address', methods=['GET', 'POST'])
@@ -62,7 +62,7 @@ def address():
 @app.route('/address/<addressID>', methods=['GET', 'PUT', 'DELETE'])
 def address_id(addressID):
     if flask.request.method == 'GET':
-        return get_address_by_aid(addressID)
+        return json.dumps(get_address_by_aid(addressID))
 
     elif flask.request.method == 'PUT':
         update_address(addressID, request.form['address'])
@@ -77,7 +77,7 @@ def address_id_users(addressID):
         return insert_user_by_addressid(addressID)
 
     elif flask.request.method == 'GET':
-        return get_user_by_addressid(addressID)
+        return json.dumps(get_user_by_addressid(addressID))
 
 
 if __name__ == '__main__':
