@@ -41,7 +41,6 @@ def users_id(userID):
         # delete_user_info(userID) - userID get from url
         delete_user(request.args.get('userID'))
 
-
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address():
     if flask.request.method == 'POST':
