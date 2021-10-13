@@ -94,7 +94,7 @@ class BaseDataResource:
         cur = conn.cursor()
 
         sql = "SELECT * FROM " + db_schema + "." + table_name + " " + wc
-        print(sql)
+        
         res = cur.execute(sql, args=args)
         res = cur.fetchall()
 
