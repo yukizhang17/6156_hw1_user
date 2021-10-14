@@ -11,5 +11,5 @@ def get_user_by_id(user_id):
     template = {"id": user_id}
     return BaseApplicationResource.get_by_template(db_name, table_name, template)
 
-# def insert_user(create_data):
-    # BaseApplicationResource.create(db_name, table_name, create_data)
+def insert_user(create_data):
+    return BaseApplicationResource.create(db_name, table_name, create_data)

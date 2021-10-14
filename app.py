@@ -18,7 +18,8 @@ def index_page():
 def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
-        insert_user(request.form['user'])
+        insert_user(request.form)
+        return "Yes"
         # create a new user record
             # 1. check if it exists
             #   select * where email = email
@@ -39,7 +40,7 @@ def users_id(userID):
 
     elif flask.request.method == 'PUT':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
-        update_user(userID, request.form['user'])
+        update_user(userID, request.form)
         # extract items from data about user's info name, email, etc.
 
     elif flask.request.method == 'DELETE':
@@ -50,7 +51,7 @@ def users_id(userID):
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
     if flask.request.method == 'POST':
-        return update_address_by_uid(userID, request.form['address'])
+        return update_address_by_uid(userID, request.form)
         # Insert a new address
         # associate aid with uid -> get from selecting or email
         # Insert new record to user_address
@@ -68,7 +69,7 @@ def users_id_address(userID):
 @app.route('/address', methods=['GET', 'POST'])
 def address():
     if flask.request.method == 'POST':
-        insert_address(request.form['address'])
+        insert_address(request.form)
         # check duplicate
         # insert a new address
 
@@ -83,7 +84,7 @@ def address_id(addressID):
         return json.dumps(get_address_by_aid(addressID))
 
     elif flask.request.method == 'PUT':
-        update_address(addressID, request.form['address'])
+        update_address(addressID, request.form)
 
     elif flask.request.method == 'DELETE':
         delete_address(addressID)
