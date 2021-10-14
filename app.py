@@ -3,7 +3,7 @@ from flask import *
 #from application.user_services import userclass
 from application_services.address_service import *
 import json
- 
+
 app = Flask(__name__)
 
 
@@ -19,6 +19,12 @@ def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
         insert_user(request.form['user'])
+        # create a new user record
+            # 1. check if it exists
+            #   select * where email = email
+            # 2. if no insert_user()
+            #uuid.uuid4() = 32 bits str
+
 
     elif flask.request.method == 'GET':
         # get_all_user_info() -> JSON()
@@ -34,6 +40,7 @@ def users_id(userID):
     elif flask.request.method == 'PUT':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form['user'])
+        # extract items from data about user's info name, email, etc.
 
     elif flask.request.method == 'DELETE':
         # delete_user_info(userID) - userID get from url
@@ -43,16 +50,27 @@ def users_id(userID):
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
     if flask.request.method == 'POST':
-        return update_address_by_uid(userID)
+        return update_address_by_uid(userID, request.form['address'])
+        # Insert a new address
+        # associate aid with uid -> get from selecting or email
+        # Insert new record to user_address
 
     elif flask.request.method == 'GET':
         return json.dumps(get_address_by_uid(userID))
-
+        # join user with user_address and return
+    # elif flask.request.method == 'PUT':
+        # 1. get aid
+        # 2. delete <uid, aid> in user_address
+        # 3. create a new address with request.form['address']
+        # 4. insert to address table
+        # 5. insert <uid, new aid> to user_address table
 
 @app.route('/address', methods=['GET', 'POST'])
 def address():
     if flask.request.method == 'POST':
         insert_address(request.form['address'])
+        # check duplicate
+        # insert a new address
 
     elif flask.request.method == 'GET':
         # print(get_all_address())
