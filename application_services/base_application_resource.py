@@ -56,6 +56,11 @@ class BaseApplicationResource(ABC):
         return res
 
     @classmethod
+    def find_in_condition(cls, db_name, table_name, select_vars, in_variable, in_values):
+        res = BaseDataResource.find_in_condition(db_name, table_name, select_vars, in_variable, in_values)
+        return res
+
+    @classmethod
     @abstractmethod
     def get_links(cls, resource_data):
         pass

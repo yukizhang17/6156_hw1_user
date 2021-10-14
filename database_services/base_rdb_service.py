@@ -164,3 +164,22 @@ class BaseDataResource:
         conn.close()
 
         return res
+
+    @classmethod
+    def find_in_condition(cls, db_schema, table_name, select_vars, in_variable, in_values):
+
+        conn = BaseDataResource.get_db_connection()
+        cur = conn.cursor()
+
+        select_clause = "*"
+        if select_vars is not None:
+            select_clause = ",".join(select_vars)
+        in_values_clause = ",".join(in_values)
+        sql = "SELECT " + select_clause + " FROM " + db_schema + "." + table_name + " WHERE " + \
+              in_variable + " in (" + in_values_clause + ")"
+        res = cur.execute(sql)
+        res = cur.fetchall()
+
+        conn.close()
+
+        return res
