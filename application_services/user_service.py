@@ -35,3 +35,4 @@ def update_user(userID, update_data):
 def delete_user(userID):
     template = {"uid": userID}
     BaseApplicationResource.delete(db_name, table_name, template)
+    BaseApplicationResource.delete(db_name, "users_address", template)
