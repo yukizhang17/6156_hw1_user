@@ -7,11 +7,10 @@
 
 <body>
 
-  <h1>Welcome to 6156 Project page</h1>
-
   You can insert user right here
-<form action="/users" method="post" name="user">
+<form action="/users/{{userID}}" method="post" name="user">
  <ul>
+  You id is {{userID}}
   <li>
     <label for="last_name">Last Name:</label>
     <input type="text" id="last_name" name="last_name">
@@ -29,21 +28,17 @@
     <input type="text" id="email" name="email">
   </li>
   <li class="button">
-  <button type="submit">Register</button>
+  <button type="submit">update</button>
 </li>
  </ul>
 
 </form>
 
-
-
-You can get all user information here
-
-<a href="/users">
-   <button>Get All Users</button>
-</a>
-
-
+IF YOU WANT TO DELETE YOUR ACCOUNT, PRESS HERE!
+<form action="/users/{{userID}}" method="post" name="delete">
+   <input type="hidden" id="delete" name="delete" value="3487">
+   <button method="post">DELETE</button>
+</form>
 
 </body>
 </html>

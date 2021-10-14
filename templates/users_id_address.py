@@ -7,13 +7,13 @@
 
 <body>
 
-  You can insert user right here
-<form action="/users/{{userID}}" method="post" name="user">
+  You can add your address right here
+<form action="/users/{{userID}}/address" method="post" name="address">
  <ul>
   You id is {{userID}}
   <li>
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name">
+    <label for="street_name1">street_name1:</label>
+    <input type="text" id="street_name1" name="street_name1">
   </li>
   <li>
     <label for="first_name">First Name:</label>
