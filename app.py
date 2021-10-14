@@ -26,8 +26,6 @@ def users():
             # 2. if no insert_user()
             #uuid.uuid4() = 32 bits str
         
-
-
     elif flask.request.method == 'GET':
         # get_all_user_info() -> JSON()
         return json.dumps(get_all_user())
