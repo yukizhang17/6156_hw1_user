@@ -38,12 +38,11 @@ def users():
 def users_id(userID):
     print(userID)
     if flask.request.method == 'GET':
-        return render_template("users.html", userID=userID)
+        return render_template("users_id.html", userID=userID)
         # get_user_info(userID) - userID get from url -> JSON
         return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'POST':
-        print("here")
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
         # extract items from data about user's info name, email, etc.
@@ -62,7 +61,7 @@ def users_id_address(userID):
         # Insert new record to user_address
 
     elif flask.request.method == 'GET':
-        return json.dumps(get_address_by_uid(userID))
+        return render_template("user_id_address", json.dumps(get_address_by_uid(userID)))
         # join user with user_address and return
     # elif flask.request.method == 'PUT':
         # 1. get aid
