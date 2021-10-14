@@ -22,3 +22,15 @@ def insert_user(create_data):
         for item in create_data:
             template[item] = create_data[item]
         BaseApplicationResource.create(db_name, table_name, template)
+
+
+def update_user(userID, update_data):
+    template = {}
+    for item in update_data:
+        template[item] = update_data[item]
+    # print(template)
+    user_id_template = {"uid": userID}
+    BaseApplicationResource.update(db_name, table_name, template, user_id_template)
+
+def delete_user(userID):
+    

@@ -40,7 +40,7 @@ def users_id(userID):
 
     elif flask.request.method == 'PUT':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
-        update_user(userID, request.form['user'])
+        update_user(userID, request.form)
         # extract items from data about user's info name, email, etc.
 
     elif flask.request.method == 'DELETE':

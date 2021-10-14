@@ -141,6 +141,7 @@ class BaseDataResource:
         cols_clause = ",".join(cols)
 
         sql_stmt = "UPDATE " + db_schema + "." + table_name + " SET " + cols_clause + " " + wc
+        print(sql_stmt)
 
         args.extend(wc_args)
 
