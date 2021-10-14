@@ -150,7 +150,7 @@ class BaseDataResource:
         return res
 
     @classmethod
-    def delete(cls, db_schema, table_name, record_id):
+    def delete(cls, db_schema, table_name, template):
         wc, args = BaseDataResource.get_where_clause_args(template)
 
         conn = BaseDataResource.get_db_connection()
