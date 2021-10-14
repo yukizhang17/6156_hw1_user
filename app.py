@@ -1,6 +1,6 @@
 import flask
 from flask import *
-#from application.user_services import userclass
+from application_services.user_service import *
 from application_services.address_service import *
 import json
 
@@ -18,12 +18,13 @@ def index_page():
 def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
-        insert_user(request.form['user'])
+        insert_user(request.form)
         # create a new user record
             # 1. check if it exists
             #   select * where email = email
             # 2. if no insert_user()
             #uuid.uuid4() = 32 bits str
+        
 
 
     elif flask.request.method == 'GET':
