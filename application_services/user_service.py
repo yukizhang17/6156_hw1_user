@@ -32,5 +32,3 @@ def update_user(userID, update_data):
     user_id_template = {"uid": userID}
     BaseApplicationResource.update(db_name, table_name, template, user_id_template)
 
-def delete_user(userID):
-    
