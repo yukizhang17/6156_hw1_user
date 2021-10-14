@@ -7,6 +7,38 @@
 
 <body>
 
-  <h1>You can insert user here</h1>
+  You can insert user right here
+<form action="/users/{{userID}}" method="post" name="user">
+ <ul>
+  You id is {{userID}}
+  <li>
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name">
+  </li>
+  <li>
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="fisrt_name">
+  </li>
+  <li>
+    <label for="contact_number">Phone Number:</label>
+    <input type="text" id="phone_number" name="phone_number">
+  </li>
+      <li>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email">
+  </li>
+  <li class="button">
+  <button type="submit">update</button>
+</li>
+ </ul>
+
+</form>
+
+IF YOU WANT TO DELETE YOUR ACCOUNT, PRESS HERE!
+<form action="/users/{{userID}}" method="post" name="delete">
+   <input type="hidden" id="custId" name="custId" value="3487">
+   <button method="post">DELETE</button>
+</form>
+
 </body>
 </html>

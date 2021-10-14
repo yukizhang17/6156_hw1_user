@@ -20,7 +20,7 @@ def users():
         # User form['user'] for data insertion -> None
         insert_user(request.form)
 
-        return "Yes"
+        return "You are all set"
         # create a new user record
             # 1. check if it exists
             #   select * where email = email
@@ -34,13 +34,16 @@ def users():
         return json.dumps(get_all_user())
 
 
-@app.route('/users/<userID>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/users/<userID>', methods=['GET', 'POST', 'DELETE'])
 def users_id(userID):
+    print(userID)
     if flask.request.method == 'GET':
+        return render_template("users.html", userID=userID)
         # get_user_info(userID) - userID get from url -> JSON
         return json.dumps(get_user_by_id(userID))
 
-    elif flask.request.method == 'PUT':
+    elif flask.request.method == 'POST':
+        print("here")
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
         # extract items from data about user's info name, email, etc.
@@ -80,12 +83,12 @@ def address():
         return json.dumps(get_all_address())
 
 
-@app.route('/address/<addressID>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/address/<addressID>', methods=['GET', 'POST', 'DELETE'])
 def address_id(addressID):
     if flask.request.method == 'GET':
         return json.dumps(get_address_by_aid(addressID))
 
-    elif flask.request.method == 'PUT':
+    elif flask.request.method == 'POST':
         update_address(addressID, request.form)
 
     elif flask.request.method == 'DELETE':
