@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index_page():
-    return """render_template("index.html")"""
+    return render_template("index.html")
 
 # newsId = shortuuid.uuid(url)
 
