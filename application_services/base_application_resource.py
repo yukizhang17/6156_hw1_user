@@ -27,7 +27,7 @@ class BaseApplicationResource(ABC):
             return resource_data
 
     @classmethod
-    def get_by_template(cls, db_name, table_name, template):
+    def get_by_template(self, db_name, table_name, template):
         resource = BaseDataResource.find_by_template(db_name, table_name, template)
         # result = self.get_links(resource)
         print(resource)
@@ -40,24 +40,19 @@ class BaseApplicationResource(ABC):
         pass
 
     @classmethod
-    def create(cls, db_name, table_name, create_data):
+    def create(db_name, table_name, create_data):
         res = BaseDataResource.create(db_name, table_name, create_data)
 
         return res
 
     @classmethod
-    def update(cls, db_name, table_name, update_data, template):
+    def update(db_name, table_name, update_data, template):
         res = BaseDataResource.update(db_name, table_name, update_data, template)
         return res
 
     @classmethod
-    def delete(cls, db_name, table_name, record_id):
-        res = BaseDataResource.delete(db_name, table_name, record_id)
-        return res
-
-    @classmethod
-    def find_in_condition(cls, db_name, table_name, select_vars, in_variable, in_values):
-        res = BaseDataResource.find_in_condition(db_name, table_name, select_vars, in_variable, in_values)
+    def delete(db_name, table_name, template):
+        res = BaseDataResource.delete(db_name, table_name, template)
         return res
 
     @classmethod
