@@ -53,7 +53,11 @@ def users_id(userID):
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
     if flask.request.method == 'POST':
-        return update_address_by_uid(userID, request.form)
+        try:
+            create_address_by_uid(userID, request.form)
+            return "Address added successfully for user!"
+        except Exception as e1:
+            return "Failed to add address for user!"
         # Insert a new address
         # associate aid with uid -> get from selecting or email
         # Insert new record to user_address
