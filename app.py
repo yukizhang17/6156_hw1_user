@@ -19,12 +19,14 @@ def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
         insert_user(request.form)
+
         return "Yes"
         # create a new user record
             # 1. check if it exists
             #   select * where email = email
             # 2. if no insert_user()
             #uuid.uuid4() = 32 bits str
+        
 
 
     elif flask.request.method == 'GET':
