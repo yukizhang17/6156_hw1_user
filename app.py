@@ -19,7 +19,6 @@ def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
         insert_user(request.form)
-
         return "You are all set"
         # create a new user record
             # 1. check if it exists
@@ -38,9 +37,9 @@ def users():
 def users_id(userID):
     print(userID)
     if flask.request.method == 'GET':
-        return render_template("users_id.html", userID=userID)
+        return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
         # get_user_info(userID) - userID get from url -> JSON
-        return json.dumps(get_user_by_id(userID))
+        #return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'POST':
         # update_user_info(userID) - userID get from url - request.form['user'] input form
@@ -61,7 +60,7 @@ def users_id_address(userID):
         # Insert new record to user_address
 
     elif flask.request.method == 'GET':
-        return render_template("user_id_address", json.dumps(get_address_by_uid(userID)))
+        return render_template("user_id_address", jsonfile=json.dumps(get_address_by_uid(userID)))
         # join user with user_address and return
     # elif flask.request.method == 'PUT':
         # 1. get aid
@@ -85,7 +84,7 @@ def address():
 @app.route('/address/<addressID>', methods=['GET', 'POST', 'DELETE'])
 def address_id(addressID):
     if flask.request.method == 'GET':
-        return json.dumps(get_address_by_aid(addressID))
+        return render_template("address_id.html", jsonfile=json.dumps(get_address_by_aid(addressID))) 
 
     elif flask.request.method == 'POST':
         update_address(addressID, request.form)
@@ -100,7 +99,7 @@ def address_id_users(addressID):
         return insert_user_by_addressid(addressID)
 
     elif flask.request.method == 'GET':
-        return json.dumps(get_user_by_addressid(addressID))
+        return render_template("address_id_users.html", jsonfile=json.dumps(get_user_by_addressid(addressID))) 
 
 
 if __name__ == '__main__':
