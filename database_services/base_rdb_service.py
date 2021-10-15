@@ -173,9 +173,13 @@ class BaseDataResource:
         select_clause = "*"
         if select_vars is not None:
             select_clause = ",".join(select_vars)
+        for i in range(len(in_values)):
+            in_values[i] = '"' + in_values[i] + '"'
+
         in_values_clause = ",".join(in_values)
         sql = "SELECT " + select_clause + " FROM " + db_schema + "." + table_name + " WHERE " + \
               in_variable + " in (" + in_values_clause + ")"
+        print(sql)
         res = cur.execute(sql)
         res = cur.fetchall()
 

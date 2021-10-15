@@ -40,13 +40,18 @@ def users_id(userID):
         #return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'POST':
+        if "delete" in flask.request.form:
+            # delete_user_info(userID) - userID get from url
+            delete_user(userID)
+            return "User is already deleted."
+        # print(request.form)
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
+        return "You are all set."
         # extract items from data about user's info name, email, etc.
 
-    elif flask.request.method == 'DELETE':
-        # delete_user_info(userID) - userID get from url
-        delete_user(userID)
+    
+        
 
 
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
@@ -62,7 +67,10 @@ def users_id_address(userID):
         # Insert new record to user_address
 
     elif flask.request.method == 'GET':
-        return render_template("user_id_address", jsonfile=json.dumps(get_address_by_uid(userID)))
+        # return json.dumps(get_address_by_uid(userID))
+        return render_template("users_id_address.html", userID=userID, jsonfile=json.dumps(get_address_by_uid(userID)))
+
+
         # join user with user_address and return
     # elif flask.request.method == 'PUT':
         # 1. get aid
@@ -75,6 +83,7 @@ def users_id_address(userID):
 def address():
     if flask.request.method == 'POST':
         insert_address(request.form)
+        return "You are all set"
         # check duplicate
         # insert a new address
 
@@ -86,15 +95,17 @@ def address():
 @app.route('/address/<addressID>', methods=['GET', 'POST', 'DELETE'])
 def address_id(addressID):
     if flask.request.method == 'GET':
-        return render_template("address_id.html", jsonfile=json.dumps(get_address_by_aid(addressID))) 
+        return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID))) 
 
     elif flask.request.method == 'POST':
+        if "delete" in flask.request.form:
+            # delete_user_info(userID) - userID get from url
+            delete_address(addressID)
+            return "Address is already deleted."
         update_address(addressID, request.form)
+        return "Address has been updated."
 
-    elif flask.request.method == 'DELETE':
-        delete_address(addressID)
-
-
+'''
 @app.route('/address/<addressID>/users', methods=['GET', 'POST'])
 def address_id_users(addressID):
     if flask.request.method == 'POST':
@@ -102,6 +113,7 @@ def address_id_users(addressID):
 
     elif flask.request.method == 'GET':
         return render_template("address_id_users.html", jsonfile=json.dumps(get_user_by_addressid(addressID))) 
+'''
 
 
 if __name__ == '__main__':

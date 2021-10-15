@@ -1,5 +1,6 @@
 import uuid
 from application_services.base_application_resource import BaseApplicationResource
+from application_services.address_service import *
 
 db_name = "users"
 table_name = "user"
@@ -25,12 +26,13 @@ def insert_user(create_data):
         BaseApplicationResource.create(db_name, table_name, template)
 
 def update_user(userID, update_data):
-    template = {}
+    data = {}
     for item in update_data:
-        template[item] = update_data[item]
-    # print(template)
+        if update_data[item] != "":
+            data[item] = update_data[item]
+    # print(data)
     user_id_template = {"uid": userID}
-    BaseApplicationResource.update(db_name, table_name, template, user_id_template)
+    BaseApplicationResource.update(db_name, table_name, data, user_id_template)
 
 def delete_user(userID):
     template = {"uid": userID}
@@ -42,7 +44,11 @@ def get_address_by_uid(userID):
     aids = []
     for addr in addr_list:
         aids.append(addr['aid'])
-    addresses = BaseApplicationResource.find_in_condition(db_name, address_table_name, None, "aid", aids)
+    print("aids: ", aids)
+    if len(aids) > 0:
+        addresses = BaseApplicationResource.find_in_condition(db_name, address_table_name, None, "aid", aids)
+    else:
+        addresses = {}
     return addresses
 
 

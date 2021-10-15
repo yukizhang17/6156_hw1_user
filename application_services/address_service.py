@@ -4,6 +4,7 @@ Function to deal with address table by using SQL commands
 
 from application_services.base_application_resource import BaseApplicationResource
 import json
+import uuid
 
 '''
 Global field
@@ -21,13 +22,15 @@ def insert_address(data):
     Function to insert a new address entry to adress table
     '''
     try:
-        template = json.loads(data)
-        if base_application_resource.get_by_template(DB, ADDRESS_TABLE, template):
-            return "Address already exists."
+        print(data)
+        template = data
+        address = BaseApplicationResource.get_by_template(DB, ADDRESS_TABLE, template)
+        if address:
+            return address[0]["aid"]
         else:
             aid = uuid.uuid4().hex
             template = {'aid': aid}
-            template.update(json.loads(data))
+            template.update(data)
             res = BaseApplicationResource.create(DB, ADDRESS_TABLE, template)
             print(res)
             return aid
@@ -52,7 +55,7 @@ def get_address_by_aid(aid):
     '''
     try:
         template = {"aid": aid}
-        return BaseApplicationResource.get_by_template(db_name, table_name, template)
+        return BaseApplicationResource.get_by_template(DB, ADDRESS_TABLE, template)
     except:
         print("ops, the address not found")
 
@@ -63,7 +66,11 @@ def update_address(aid, data):
     '''
     try:
         template = {'aid': aid}
-        return BaseApplicationResource.update(DB, ADDRESS_TABLE, json.loads(data), template)
+        update_data = {}
+        for item in data:
+            if data[item] != "":
+                update_data[item] = data[item]
+        return BaseApplicationResource.update(DB, ADDRESS_TABLE, update_data, template)
     except:
         print ("ops, update addres failed")
 
@@ -73,7 +80,7 @@ def delete_address(aid):
     Function to delete an address record in address table by its aid
     '''
     try:
-        template = ['aid': aid]
+        template = {'aid':aid}
         print(delete_address_user(aid))
         return BaseApplicationResource.delete(DB, ADDRESS_TABLE, template)
     except:
@@ -86,24 +93,12 @@ def delete_address_user(aid):
     delete user or address happens.
     '''
     try:
-        template = ['aid': aid]
+        template = {'aid':aid}
         return BaseApplicationResource.delete(DB, USER_ADDRESS_TABLE, template)
     except:
         print("ops, cannot delete record in user_address table")
 
-'''
-def get_user_by_addressid(aid):
-    '''
-   # Function to get all users at a specific address by aid
-    '''
-    try:
-        template = {'aid': aid}
 
-'''
-
-'''
-def insert_user_by_addressid(aid):
-'''
 
 
 
