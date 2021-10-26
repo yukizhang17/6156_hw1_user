@@ -9,11 +9,9 @@ import uuid
 '''
 Global field
 '''
-DB = "users"
+DB = "business"
 ADDRESS_TABLE = "address"
-USER_ADDRESS_TABLE = 'user_address'
-
-
+BUSINESS_ADDRESS_TABLE = 'business_address'
 
 
 
@@ -22,25 +20,26 @@ def insert_address(data):
     Function to insert a new address entry to adress table
     '''
     try:
-        print(data)
+        print('data is', data)
         template = data
         address = BaseApplicationResource.get_by_template(DB, ADDRESS_TABLE, template)
+        print(address)
         if address:
-            return address[0]["aid"]
+            return address[0]["baid"]
         else:
-            aid = uuid.uuid4().hex
-            template = {'aid': aid}
+            baid = uuid.uuid4().hex
+            template = {'baid': baid}
             template.update(data)
             res = BaseApplicationResource.create(DB, ADDRESS_TABLE, template)
             print(res)
-            return aid
+            return baid
     except:
-        print("ops, address instert failed")
+        print("ops, address insert failed")
 
 
 def get_all_address():
     '''
-    Function to query all adress data entries form address table
+    Function to query all address data entries form address table
     '''
     try:
         res = BaseApplicationResource.get_by_template(DB, ADDRESS_TABLE, None)
@@ -54,18 +53,18 @@ def get_address_by_aid(aid):
     Function to query a sepcific address by its aid
     '''
     try:
-        template = {"aid": aid}
+        template = {"baid": baid}
         return BaseApplicationResource.get_by_template(DB, ADDRESS_TABLE, template)
     except:
         print("ops, the address not found")
 
 
-def update_address(aid, data):
+def update_address(baid, data):
     '''
     Function to update an address
     '''
     try:
-        template = {'aid': aid}
+        template = {'baid': baid}
         update_data = {}
         for item in data:
             if data[item] != "":
@@ -75,28 +74,28 @@ def update_address(aid, data):
         print ("ops, update addres failed")
 
 
-def delete_address(aid):
+def delete_address(baid):
     '''
     Function to delete an address record in address table by its aid
     '''
     try:
-        template = {'aid':aid}
-        print(delete_address_user(aid))
+        template = {'baid':baid}
+        print(delete_address_business(baid))
         return BaseApplicationResource.delete(DB, ADDRESS_TABLE, template)
     except:
         print("ops, delete rocord in address table failed")
 
 
-def delete_address_user(aid):
+def delete_address_business(baid):
     '''
-    Helper function to delete records in user_address table when action of
-    delete user or address happens.
+    Helper function to delete records in business_address table when action of
+    delete business or address happens.
     '''
     try:
-        template = {'aid':aid}
-        return BaseApplicationResource.delete(DB, USER_ADDRESS_TABLE, template)
+        template = {'baid':baid}
+        return BaseApplicationResource.delete(DB, BUSINESS_ADDRESS_TABLE, template)
     except:
-        print("ops, cannot delete record in user_address table")
+        print("ops, cannot delete record in business_address table")
 
 
 

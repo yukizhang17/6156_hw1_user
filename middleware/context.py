@@ -12,7 +12,7 @@ def get_db_info():
     """
     db_host = "localhost"
     db_user = "root"
-    db_password = "dbuserdbuser"
+    db_password = ""
 
     if db_host is not None:
         db_info = {
@@ -25,7 +25,7 @@ def get_db_info():
         db_info = {
             "host": "localhost",
             "user": "dbuser",
-            "password": "dbuserdbuser",
+            "password": "",
             "cursorclass": pymysql.cursors.DictCursor
         }
 

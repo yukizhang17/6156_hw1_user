@@ -8,19 +8,15 @@
 <body>
 
   You can insert user right here
-<form action="/users/{{userID}}" method="post" name="user">
+<form action="/business/{{businessID}}" method="post" name="business">
  <ul>
   You id is {{userID}}
   <li>
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name">
+    <label for="business_name">Business Name:</label>
+    <input type="text" id="business_name" name="business_name">
   </li>
   <li>
-    <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="first_name">
-  </li>
-  <li>
-    <label for="contact_number">Phone Number:</label>
+    <label for="phone_number">Phone Number:</label>
     <input type="text" id="phone_number" name="phone_number">
   </li>
       <li>
@@ -35,7 +31,7 @@
 </form>
 
 IF YOU WANT TO DELETE YOUR ACCOUNT, PRESS HERE!
-<form action="/users/{{userID}}" method="post" name="delete">
+<form action="/business/{{businessID}}" method="post" name="delete">
    <input type="hidden" id="delete" name="delete" value="3487">
    <button method="post">DELETE</button>
 </form>
