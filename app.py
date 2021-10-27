@@ -5,6 +5,7 @@ from application_services.address_service import *
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
