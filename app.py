@@ -3,6 +3,7 @@ from flask import *
 from application_services.user_service import *
 from application_services.address_service import *
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +11,8 @@ CORS(app)
 
 @app.route('/')
 def index_page():
-    return render_template("index.html")
+    # return render_template("index.html")
+    return "This is the homepage."
 
 # newsId = shortuuid.uuid(url)
 
@@ -36,9 +38,9 @@ def users():
 def users_id(userID):
     print(userID)
     if flask.request.method == 'GET':
-        return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
+        # return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
         # get_user_info(userID) - userID get from url -> JSON
-        #return json.dumps(get_user_by_id(userID))
+        return json.dumps(get_user_by_id(userID))
 
     elif flask.request.method == 'POST':
         if "delete" in flask.request.form:
@@ -68,8 +70,8 @@ def users_id_address(userID):
         # Insert new record to user_address
 
     elif flask.request.method == 'GET':
-        # return json.dumps(get_address_by_uid(userID))
-        return render_template("users_id_address.html", userID=userID, jsonfile=json.dumps(get_address_by_uid(userID)))
+        return json.dumps(get_address_by_uid(userID))
+        # return render_template("users_id_address.html", userID=userID, jsonfile=json.dumps(get_address_by_uid(userID)))
 
 
         # join user with user_address and return
@@ -96,7 +98,8 @@ def address():
 @app.route('/address/<addressID>', methods=['GET', 'POST', 'DELETE'])
 def address_id(addressID):
     if flask.request.method == 'GET':
-        return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID))) 
+        return json.dumps(get_address_by_aid(addressID))
+        # return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID))) 
 
     elif flask.request.method == 'POST':
         if "delete" in flask.request.form:
