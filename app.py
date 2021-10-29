@@ -22,6 +22,8 @@ def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
         uid = insert_user(request.form)
+        if uid == "Exist":
+            return "This email has been registered.", 422
         res = {
                 "location": f"/users/{uid}"
                 }
@@ -34,26 +36,27 @@ def users():
 
 @app.route('/users/<userID>', methods=['GET', 'POST', 'DELETE'])
 def users_id(userID):
-    print(userID)
     if flask.request.method == 'GET':
         # return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
         # get_user_info(userID) - userID get from url -> JSON
+        res = get_user_by_id(userID)
+        print(res)
+        if len(res) == 0:
+            return "Cannot find resource.", 404
         return json.dumps(get_user_by_id(userID)), 200
 
     elif flask.request.method == 'POST':
-        if "delete" in flask.request.form:
-            # delete_user_info(userID) - userID get from url
-            delete_user(userID)
-            return f"User {userID} is already deleted.", 204
         # print(request.form)
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
         return f"User {userID}'s info has been updated", 200
         # extract items from data about user's info name, email, etc.
 
-
-
-
+    elif flask.request.method == "DELETE":
+        # delete_user_info(userID) - userID get from url
+        delete_user(userID)
+        # return f"User {userID} is already deleted.", 204
+        return {"hello":"world"}, 204
 
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
@@ -100,12 +103,13 @@ def address_id(addressID):
         # return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID)))
 
     elif flask.request.method == 'POST':
-        if "delete" in flask.request.form:
-            # delete_user_info(userID) - userID get from url
-            delete_address(addressID)
-            return "Address is already deleted."
         update_address(addressID, request.form)
         return "Address has been updated."
+
+    elif flask.request.method == "DELETE":
+        # delete_user_info(userID) - userID get from url
+        delete_address(addressID)
+        return "Address is already deleted."
 
 '''
 @app.route('/address/<addressID>/users', methods=['GET', 'POST'])

@@ -18,13 +18,15 @@ def insert_user(create_data):
     # ﬁprint(create_data['email'])
     email = create_data["email"]
     res = BaseApplicationResource.get_by_template(db_name, table_name, {"email": email})
-    if res is not None:
+    if len(res) == 0:
         uid = uuid.uuid4().hex
         template = {"uid": uid}
         for item in create_data:
             template[item] = create_data[item]
         BaseApplicationResource.create(db_name, table_name, template)
         return uid
+    else:
+        return "Exist"
 
 def update_user(userID, update_data):
     data = {}
