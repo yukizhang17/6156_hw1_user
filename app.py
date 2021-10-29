@@ -21,17 +21,15 @@ def index_page():
 def users():
     if flask.request.method == 'POST':
         # User form['user'] for data insertion -> None
-        insert_user(request.form)
-        return "You are all set"
-        # create a new user record
-            # 1. check if it exists
-            #   select * where email = email
-            # 2. if no insert_user()
-            #uuid.uuid4() = 32 bits str
-        
+        uid = insert_user(request.form)
+        res = {
+                "location": f"/users/{uid}"
+                }
+        return json.dumps(res), 201
+
     elif flask.request.method == 'GET':
         # get_all_user_info() -> JSON()
-        return json.dumps(get_all_user())
+        return json.dumps(get_all_user()), 200
 
 
 @app.route('/users/<userID>', methods=['GET', 'POST', 'DELETE'])
@@ -40,21 +38,21 @@ def users_id(userID):
     if flask.request.method == 'GET':
         # return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
         # get_user_info(userID) - userID get from url -> JSON
-        return json.dumps(get_user_by_id(userID))
+        return json.dumps(get_user_by_id(userID)), 200
 
     elif flask.request.method == 'POST':
         if "delete" in flask.request.form:
             # delete_user_info(userID) - userID get from url
             delete_user(userID)
-            return "User is already deleted."
+            return f"User {userID} is already deleted.", 204
         # print(request.form)
         # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
-        return "You are all set."
+        return f"User {userID}'s info has been updated", 200
         # extract items from data about user's info name, email, etc.
 
-    
-        
+
+
 
 
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
@@ -99,7 +97,7 @@ def address():
 def address_id(addressID):
     if flask.request.method == 'GET':
         return json.dumps(get_address_by_aid(addressID))
-        # return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID))) 
+        # return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID)))
 
     elif flask.request.method == 'POST':
         if "delete" in flask.request.form:
@@ -116,7 +114,7 @@ def address_id_users(addressID):
         return insert_user_by_addressid(addressID)
 
     elif flask.request.method == 'GET':
-        return render_template("address_id_users.html", jsonfile=json.dumps(get_user_by_addressid(addressID))) 
+        return render_template("address_id_users.html", jsonfile=json.dumps(get_user_by_addressid(addressID)))
 '''
 
 

@@ -24,6 +24,7 @@ def insert_user(create_data):
         for item in create_data:
             template[item] = create_data[item]
         BaseApplicationResource.create(db_name, table_name, template)
+        return uid
 
 def update_user(userID, update_data):
     data = {}
