@@ -14,9 +14,6 @@ def index_page():
     # return render_template("index.html")
     return "This is the homepage."
 
-# newsId = shortuuid.uuid(url)
-
-
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     if flask.request.method == 'POST':
@@ -24,9 +21,7 @@ def users():
         uid = insert_user(request.form)
         if uid == "Exist":
             return "This email has been registered.", 422
-        res = {
-                "location": f"/users/{uid}"
-                }
+        res = {"location": f"/users/{uid}"}
         return json.dumps(res), 201
 
     elif flask.request.method == 'GET':
@@ -38,7 +33,6 @@ def users():
 def users_id(userID):
     if flask.request.method == 'GET':
         # return render_template("users_id.html", userID=userID, jsonfile=json.dumps(get_user_by_id(userID)))
-        # get_user_info(userID) - userID get from url -> JSON
         res = get_user_by_id(userID)
         print(res)
         if len(res) == 0:
@@ -46,32 +40,23 @@ def users_id(userID):
         return json.dumps(get_user_by_id(userID)), 200
 
     elif flask.request.method == 'POST':
-        # print(request.form)
-        # update_user_info(userID) - userID get from url - request.form['user'] input form
         update_user(userID, request.form)
         return f"User {userID}'s info has been updated", 200
-        # extract items from data about user's info name, email, etc.
 
     elif flask.request.method == "DELETE":
-        # delete_user_info(userID) - userID get from url
         delete_user(userID)
-        # return f"User {userID} is already deleted.", 204
-        return {"hello":"world"}, 204
+        return f"The user {userID} has been deleted", 204
 
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
     if flask.request.method == 'POST':
         try:
             create_address_by_uid(userID, request.form)
-            return "Address added successfully for user!"
+            return f"Address added successfully for user {userID}!", 201
         except Exception as e1:
-            return "Failed to add address for user!"
-        # Insert a new address
-        # associate aid with uid -> get from selecting or email
-        # Insert new record to user_address
-
+            return "Failed to add address for user!", 400
     elif flask.request.method == 'GET':
-        return json.dumps(get_address_by_uid(userID))
+        return json.dumps(get_address_by_uid(userID)), 200
         # return render_template("users_id_address.html", userID=userID, jsonfile=json.dumps(get_address_by_uid(userID)))
 
 
@@ -92,7 +77,6 @@ def address():
         # insert a new address
 
     elif flask.request.method == 'GET':
-        # print(get_all_address())
         return json.dumps(get_all_address())
 
 
