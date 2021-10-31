@@ -4,15 +4,50 @@ from application_services.user_service import *
 from application_services.address_service import *
 import json
 from flask_cors import CORS
+from flask_dance.contrib.google import make_google_blueprint, google
+from middleware import security
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+client_id = "533947044188-ph3626aekho0mifa5s6l4k5i20dqpdnh.apps.googleusercontent.com"
+client_secret = "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"
+app.secret_key = "anything works"
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+blueprint = make_google_blueprint(
+    client_id=client_id,
+    client_secret=client_secret,
+    reprompt_consent=True,
+    scope=["profile", "email"]
+)
+app.register_blueprint(blueprint, url_prefix="/login")
+
+g_bp = app.blueprints.get("google")
+
+
+@app.before_request
+def before_request_func():
+    print("Before request: checking authorization")
+    if 'logged_in' not in session and request.endpoint != 'login':
+        authenticated = security.check_security(request, google, g_bp)
+        if not authenticated:
+            return redirect(url_for("google.login"))
+
+
+@app.after_request
+def after_request_func(rsp):
+    print("After request: successfully completed", request)
+    return rsp
 
 
 @app.route('/')
 def index_page():
     # return render_template("index.html")
     return "This is the homepage."
+
 
 @app.route('/users', methods=['GET', 'POST'])
 def users():
@@ -47,6 +82,7 @@ def users_id(userID):
         delete_user(userID)
         return f"The user {userID} has been deleted", 204
 
+
 @app.route('/users/<userID>/address', methods=['GET', 'POST'])
 def users_id_address(userID):
     if flask.request.method == 'POST':
@@ -59,14 +95,14 @@ def users_id_address(userID):
         return json.dumps(get_address_by_uid(userID)), 200
         # return render_template("users_id_address.html", userID=userID, jsonfile=json.dumps(get_address_by_uid(userID)))
 
-
         # join user with user_address and return
     # elif flask.request.method == 'PUT':
-        # 1. get aid
-        # 2. delete <uid, aid> in user_address
-        # 3. create a new address with request.form['address']
-        # 4. insert to address table
-        # 5. insert <uid, new aid> to user_address table
+    # 1. get aid
+    # 2. delete <uid, aid> in user_address
+    # 3. create a new address with request.form['address']
+    # 4. insert to address table
+    # 5. insert <uid, new aid> to user_address table
+
 
 @app.route('/address', methods=['GET', 'POST'])
 def address():
@@ -95,6 +131,7 @@ def address_id(addressID):
         delete_address(addressID)
         return "Address is already deleted."
 
+
 '''
 @app.route('/address/<addressID>/users', methods=['GET', 'POST'])
 def address_id_users(addressID):
@@ -104,7 +141,6 @@ def address_id_users(addressID):
     elif flask.request.method == 'GET':
         return render_template("address_id_users.html", jsonfile=json.dumps(get_user_by_addressid(addressID)))
 '''
-
 
 if __name__ == '__main__':
     app.run()
