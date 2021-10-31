@@ -41,8 +41,10 @@ def before_request_func():
     except TokenExpiredError as e:
         return redirect(url_for("google.login"))
 
+
 @app.after_request
 def after_request_func(rsp):
+    print("After request: sending message")
     notification.notify(request)
     return rsp
 
