@@ -1,11 +1,13 @@
 import flask
 from flask import *
+from oauthlib.oauth2 import TokenExpiredError
+
 from application_services.user_service import *
 from application_services.address_service import *
 import json
 from flask_cors import CORS
 from flask_dance.contrib.google import make_google_blueprint, google
-from middleware import security
+from middleware import security, notification
 import os
 
 app = Flask(__name__)
@@ -31,15 +33,17 @@ g_bp = app.blueprints.get("google")
 @app.before_request
 def before_request_func():
     print("Before request: checking authorization")
-    if 'logged_in' not in session and request.endpoint != 'login':
-        authenticated = security.check_security(request, google, g_bp)
-        if not authenticated:
-            return redirect(url_for("google.login"))
-
+    try:
+        if google.authorized and request.endpoint != 'login':
+            authenticated = security.check_security(request, google, g_bp)
+            if not authenticated:
+                return redirect(url_for("google.login"))
+    except TokenExpiredError as e:
+        return redirect(url_for("google.login"))
 
 @app.after_request
 def after_request_func(rsp):
-    print("After request: successfully completed", request)
+    notification.notify(request)
     return rsp
 
 
