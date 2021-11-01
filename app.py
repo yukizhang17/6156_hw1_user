@@ -29,12 +29,12 @@ app.register_blueprint(blueprint, url_prefix="/login")
 
 g_bp = app.blueprints.get("google")
 
-
+"""
 @app.before_request
 def before_request_func():
     print("Before request: checking authorization")
     try:
-        if google.authorized and request.endpoint != 'login':
+        if not google.authorized and request.endpoint != 'login':
             authenticated = security.check_security(request, google, g_bp)
             if not authenticated:
                 return redirect(url_for("google.login"))
@@ -47,7 +47,7 @@ def after_request_func(rsp):
     print("After request: sending message")
     notification.notify(request)
     return rsp
-
+"""
 
 @app.route('/')
 def index_page():
@@ -58,8 +58,10 @@ def index_page():
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     if flask.request.method == 'POST':
+        print("Request: ", request)
+        print("request.form: ", request.json)
         # User form['user'] for data insertion -> None
-        uid = insert_user(request.form)
+        uid = insert_user(request.json)
         if uid == "Exist":
             return "This email has been registered.", 422
         res = {"location": f"/users/{uid}"}
@@ -149,4 +151,4 @@ def address_id_users(addressID):
 '''
 
 if __name__ == '__main__':
-    app.run()
+    app.run("0.0.0.0")
