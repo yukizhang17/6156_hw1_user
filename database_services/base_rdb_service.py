@@ -84,16 +84,29 @@ class BaseDataResource:
             clause = " WHERE " + " AND ".join(terms)
 
         return clause, args
+    
+    @classmethod
+    def get_limit_offset_args(cls, limit, offset):
+        clause = ""
+        if limit is not None:
+            clause += " LIMIT " + str(limit)
+        if offset is not None:
+            clause += " OFFSET " + str(offset)
+    
+        return clause
+
 
     @classmethod
-    def find_by_template(cls, db_schema, table_name, template):
+    def find_by_template(cls, db_schema, table_name, template, limit=None, offset=None):
 
         wc, args = BaseDataResource.get_where_clause_args(template)
 
         conn = BaseDataResource.get_db_connection()
         cur = conn.cursor()
 
-        sql = "SELECT * FROM " + db_schema + "." + table_name + " " + wc
+        lo = BaseDataResource.get_limit_offset_args(limit, offset)
+
+        sql = "SELECT * FROM " + db_schema + "." + table_name + " " + wc + lo
 
         res = cur.execute(sql, args=args)
         res = cur.fetchall()
