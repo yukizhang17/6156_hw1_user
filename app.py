@@ -83,7 +83,7 @@ def users_id(userID):
         return json.dumps(get_user_by_id(userID)), 200
 
     elif flask.request.method == 'POST':
-        update_user(userID, request.json)
+        update_user(userID, request.form)
         return f"User {userID}'s info has been updated", 200
 
     elif flask.request.method == "DELETE":
