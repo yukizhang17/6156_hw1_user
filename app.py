@@ -58,10 +58,11 @@ def index_page():
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     if flask.request.method == 'POST':
-        print("Request: ", request)
-        print("request.json: ", request.json)
+        # print("Request: ", request)
+        # print("request.json: ", request.json)
         # User form['user'] for data insertion -> None
-        uid = insert_user(request.json)
+        print(request.form)
+        uid = insert_user(request.form)
         if uid == "Exist":
             return "This email has been registered.", 422
         res = {"location": f"/users/{uid}"}
@@ -83,6 +84,7 @@ def users_id(userID):
         return json.dumps(get_user_by_id(userID)), 200
 
     elif flask.request.method == 'POST':
+        print(request.form)
         update_user(userID, request.form)
         return f"User {userID}'s info has been updated", 200
 
