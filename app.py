@@ -97,7 +97,7 @@ def users_id(userID):
 def users_id_address(userID):
     if flask.request.method == 'POST':
         try:
-            create_address_by_uid(userID, request.json)
+            create_address_by_uid(userID, request.form)
             return f"Address added successfully for user {userID}!", 201
         except Exception as e1:
             return "Failed to add address for user!", 400
@@ -117,7 +117,7 @@ def users_id_address(userID):
 @app.route('/address', methods=['GET', 'POST'])
 def address():
     if flask.request.method == 'POST':
-        insert_address(request.json)
+        insert_address(request.form)
         return "You are all set"
         # check duplicate
         # insert a new address
@@ -133,7 +133,7 @@ def address_id(addressID):
         # return render_template("address_id.html", addressID=addressID, jsonfile=json.dumps(get_address_by_aid(addressID)))
 
     elif flask.request.method == 'POST':
-        update_address(addressID, request.json)
+        update_address(addressID, request.form)
         return "Address has been updated."
 
     elif flask.request.method == "DELETE":
